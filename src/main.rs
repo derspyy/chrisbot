@@ -1,5 +1,3 @@
-use std::{thread, time};
-
 mod commands;
 
 use std::env;
@@ -8,7 +6,6 @@ use serenity::async_trait;
 use serenity::model::application::command::Command;
 use serenity::model::application::interaction::{Interaction, InteractionResponseType};
 use serenity::model::gateway::Ready;
-use serenity::model::id::GuildId;
 use serenity::prelude::*;
 
 struct Handler;
