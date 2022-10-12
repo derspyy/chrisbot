@@ -12,7 +12,7 @@ pub fn register(command: &mut CreateApplicationCommand) -> &mut CreateApplicatio
 }
 
 
-fn gen_palavra() -> String {
+pub fn gen_palavra() -> String {
 
     let x = random::<u8>() % 5;
     let sil1 = x + 2;
@@ -24,13 +24,18 @@ fn gen_palavra() -> String {
             let z = gen_cons(sil2);
             palavra.push_str(z.as_str());
         }
-        else if sil2 > 0 {
+        else {
             let z = gen_cons(sil2);
             palavra.push_str(z.as_str());
         }
-        let z = gen_vogs();
-        palavra.push_str(z);
-
+        if palavra.ends_with("u") {
+            let z = gen_vogs1(); // vogais sem "u" e "o"
+            palavra.push_str(z);
+        }
+        else {
+            let z = gen_vogs();
+            palavra.push_str(z);
+        }
         sil2 += 1;
     }
     return palavra;
@@ -97,6 +102,18 @@ fn gen_vogs() -> &'static str {
         3 => "i",
         4 => "o",
         0 => "u",
+        _ => "BUGOU ARRUMA"
+    };
+    return letra
+}
+fn gen_vogs1() -> &'static str {
+    let x = random::<u16>() % 3; // 4 - 1
+    let y = x as u8;
+    let letra = match y {
+        1 => "a",
+        2 => "e",
+        3 => "i",
+        0 => "o",
         _ => "BUGOU ARRUMA"
     };
     return letra
