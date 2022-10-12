@@ -64,7 +64,7 @@ fn gen_cons(sil2: u8) -> String {
         "l" => "h",
         "n" => "h",
         "g" => "u",
-        _ => "BUGOU ARRUMA"
+        _ => ""
     };
     if digrafo == "1" {
         let x = random::<u16>() % 2; // 3 - 1
