@@ -11,7 +11,7 @@ pub fn run(options: &[CommandDataOption]) -> String {
         let mut hasher = DefaultHasher::new();
         palavra.hash(&mut hasher);
         let picles: f64 = hasher.finish() as f64 / u64::MAX as f64 * 100 as f64;
-        format!("funny level da palavra: {&palavra} = {&picles}%")
+        format!("funny level da palavra: {} = {1:.2}%", &palavra, &picles)
     }
     else {
         "nao deu certo".to_string()

@@ -11,7 +11,6 @@ pub fn run() -> String {
     let mut rng = thread_rng();
     let mut palavra = String::new();
     let silabas: u8 = rng.gen_range(2..=5);
-    println!("{silabas}");
     for n in 1..=silabas {
         if n == 1 && random::<bool>() {
             palavra.push(*VOGAIS.choose(&mut rng).unwrap())

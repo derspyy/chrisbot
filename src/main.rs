@@ -34,8 +34,8 @@ impl EventHandler for Handler {
 
     async fn ready(&self, ctx: Context, ready: Ready) {
         println!("{} is connected!", ready.user.name);
-        Command::create_global_application_command(&ctx.http, |command| {commands::palavra::register(command)}).await;
-        Command::create_global_application_command(&ctx.http, |command| {commands::funny::register(command)}).await;
+        Command::create_global_application_command(&ctx.http, |command| {commands::palavra::register(command)}).await.unwrap();
+        Command::create_global_application_command(&ctx.http, |command| {commands::funny::register(command)}).await.unwrap();
     }
 }
 
