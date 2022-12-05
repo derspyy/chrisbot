@@ -1,120 +1,43 @@
-use rand::random;
+use rand::{random, thread_rng, Rng};
+use rand::seq::SliceRandom;
 
 use serenity::builder::CreateApplicationCommand;
-use serenity::model::prelude::interaction::application_command::CommandDataOption;
 
-pub fn run(_options: &[CommandDataOption]) -> String {
-    gen_palavra().to_string()
+const VOGAIS: [char; 5] = ['a', 'e', 'i', 'o', 'u'];
+const CONSOANTES: [char; 14] = ['b', 'c', 'd', 'f', 'g', 'j', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't'];
+const DIGRAFOS: [char; 3] = ['s', 'c', 'ç'];
+
+pub fn run() -> String {
+    let mut rng = thread_rng();
+    let mut palavra = String::new();
+    let silabas: u8 = rng.gen_range(2..=5);
+    println!("{silabas}");
+    for n in 1..=silabas {
+        if n == 1 && random::<bool>() {
+            palavra.push(*VOGAIS.choose(&mut rng).unwrap())
+        }
+        palavra.push(*CONSOANTES.choose(&mut rng).unwrap());
+        if palavra.ends_with('q') { palavra.push('u') };
+        if random::<bool>() {
+            match palavra.chars().last().unwrap() {
+                'c' => {palavra.push('h')},
+                'g' => {palavra.push('u')},
+                'l' => {palavra.push('h')},
+                'n' => {palavra.push('h')},
+                'r' => {palavra.push('r')},
+                's' => {palavra.push(*DIGRAFOS.choose(&mut rng).unwrap())},
+                _ => {}
+            }
+        }
+        palavra.push(*VOGAIS.choose(&mut rng).unwrap());
+        while palavra.ends_with("uu") {
+            palavra.pop();
+            palavra.push(*VOGAIS.choose(&mut rng).unwrap());
+        }
+    };
+    palavra
 }
 
 pub fn register(command: &mut CreateApplicationCommand) -> &mut CreateApplicationCommand {
     command.name("palavra").description("faze palavra")
-}
-
-
-pub fn gen_palavra() -> String {
-
-    let x = random::<u8>() % 5;
-    let sil1 = x + 2;
-    let mut palavra = "".to_string();
-    let mut sil2 : u8 = 0;
-    while sil1 > sil2 {
-
-        if (sil2 == 0) && (random::<f32>() > 0.5)  { // chance da primeira letra ser consoante
-            let z = gen_cons(sil2);
-            palavra.push_str(z.as_str());
-        }
-        else {
-            let z = gen_cons(sil2);
-            palavra.push_str(z.as_str());
-        }
-        if palavra.ends_with("u") {
-            let z = gen_vogs1(); // vogais sem "u" e "o"
-            palavra.push_str(z);
-        }
-        else {
-            let z = gen_vogs();
-            palavra.push_str(z);
-        }
-        sil2 += 1;
-    }
-    return palavra;
-}
-
-fn gen_cons(sil2: u8) -> String {
-    let x = random::<u16>() % 13; // 14 - 1
-    let y = x as u8;
-
-    let letra = match y {
-        1 => "b",
-        2 => "c",
-        3 => "d",
-        4 => "f",
-        5 => "g",
-        6 => "j",
-        7 => "l",
-        8 => "m",
-        9 => "n",
-        10 => "p",
-        11 => "qu",
-        12 => "r",
-        13 => "s",
-        0 => "t",
-        _ => "BUGOU ARRUMA"
-    };
-    let mut digrafo = match letra {
-        "c" => "h",
-        "s" => "1",
-        "r" => "r",
-        "l" => "h",
-        "n" => "h",
-        "g" => "u",
-        _ => ""
-    };
-    if digrafo == "1" {
-        let x = random::<u16>() % 2; // 3 - 1
-        let y = x as u8;
-        digrafo = match y {
-            1 => "s",
-            2 => "c",
-            0 => "ç",
-            _ => ""
-        }
-
-    }
-    let consoante : String;
-    if (random::<f32>() > 0.5) && (sil2 > 0) {
-        consoante = letra.to_string() + digrafo;
-        return consoante;
-    }
-    else {
-        return letra.to_string();
-    }
-
-}
-
-fn gen_vogs() -> &'static str {
-    let x = random::<u16>() % 4; // 5 - 1
-    let y = x as u8;
-    let letra = match y {
-        1 => "a",
-        2 => "e",
-        3 => "i",
-        4 => "o",
-        0 => "u",
-        _ => "BUGOU ARRUMA"
-    };
-    return letra
-}
-fn gen_vogs1() -> &'static str {
-    let x = random::<u16>() % 3; // 4 - 1
-    let y = x as u8;
-    let letra = match y {
-        1 => "a",
-        2 => "e",
-        3 => "i",
-        0 => "o",
-        _ => "BUGOU ARRUMA"
-    };
-    return letra
 }
