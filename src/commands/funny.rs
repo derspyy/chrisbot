@@ -8,15 +8,21 @@ use serenity::model::prelude::command::CommandOptionType;
 pub fn run(options: &[CommandDataOption]) -> String {
     let option = options.get(0).unwrap().resolved.as_ref().unwrap();
     if let CommandDataOptionValue::String(palavra) = option {
-        let mut hasher = DefaultHasher::new();
-        palavra.hash(&mut hasher);
-        let picles: f64 = hasher.finish() as f64 / u64::MAX as f64 * 100 as f64;
-        format!("funny level da palavra: {} = {1:.2}%", &palavra, &picles)
+        match palavra.as_str() {
+            "mago" => {
+                "💀".to_string()
+            },
+            _ => {
+                let mut hasher = DefaultHasher::new();
+                palavra.hash(&mut hasher);
+                let picles: f64 = hasher.finish() as f64 / u64::MAX as f64 * 100_f64;
+                format!("funny level da palavra: {} = {1:.2}%", &palavra, &picles)
+            }
+        }
     }
     else {
         "nao deu certo".to_string()
     }
-
 }
 
 pub fn register(command: &mut CreateApplicationCommand) -> &mut CreateApplicationCommand {
