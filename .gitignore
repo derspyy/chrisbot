@@ -8,5 +8,3 @@ Cargo.lock
 **/*.rs.bk
 .cargo/**
 fleet.toml
-
-fly.toml
